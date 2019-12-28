@@ -1,5 +1,11 @@
 package br.com.helpdesk.api.enums;
 
+/**
+ * 
+ * @author felipe
+ *
+ *	Enum definido para o status de um Ticket.
+ */
 public enum StatusEnum {
 	
 	NEW,

@@ -10,6 +10,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import br.com.helpdesk.api.enums.PriorityEnum;
 import br.com.helpdesk.api.enums.StatusEnum;
 
+/**
+ * 
+ * @author felipe
+ *
+ * Classe que representa um Ticket do sistema.
+ */
 @Document
 public class Ticket {
 	

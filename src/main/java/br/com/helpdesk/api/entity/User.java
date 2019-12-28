@@ -10,6 +10,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.com.helpdesk.api.enums.ProfileEnum;
 
+/**
+ * 
+ * @author felipe
+ *
+ *	Classe que representa um usuário do sistema.
+ */
 @Document
 public class User {
 	

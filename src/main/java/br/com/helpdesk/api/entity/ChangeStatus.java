@@ -8,6 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.com.helpdesk.api.enums.StatusEnum;
 
+/**
+ * 
+ * @author felipe
+ *
+ *	Classe que armazena a alteração de status de um Ticket.
+ */
 @Document
 public class ChangeStatus {
 	
@@ -22,6 +28,7 @@ public class ChangeStatus {
 	
 	private Date dateChange;
 	
+	/** Atributo que identifica o status do ticket antes da alteração. */
 	private StatusEnum status;
 
 	public String getId() {
