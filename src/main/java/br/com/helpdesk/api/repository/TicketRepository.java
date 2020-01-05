@@ -33,7 +33,7 @@ public interface TicketRepository extends MongoRepository<Ticket, String>{
 	 * @param pages
 	 * @return
 	 */
-	Page<Ticket> findByTitleIgnoreCaseContainingAndStatusIgnoreCaseContainingAndPriorityIgnoreCaseContainingOrderByDateDesc(String title, String status, String priority, Pageable pages);
+	Page<Ticket> findByTitleIgnoreCaseContainingAndStatusAndPriorityOrderByDateDesc(String title, String status, String priority, Pageable pages);
 	
 	/**
 	 * Retorna Tickets através dos título, status, prioridade e usuário, passados por parâmetro.
@@ -45,7 +45,7 @@ public interface TicketRepository extends MongoRepository<Ticket, String>{
 	 * @param pages
 	 * @return
 	 */
-	Page<Ticket> findByTitleIgnoreCaseContainingAndStatusIgnoreCaseContainingAndPriorityIgnoreCaseContainingAndUserIdOrderByDateDesc(String title, String status, String priority, String userId, Pageable pages);
+	Page<Ticket> findByTitleIgnoreCaseContainingAndStatusAndPriorityAndUserIdOrderByDateDesc(String title, String status, String priority, String userId, Pageable pages);
 	
 	/**
 	 * Retorna Tickets através dos título, status, prioridade e usuário que o assinou, passados por parâmetro.
@@ -57,7 +57,7 @@ public interface TicketRepository extends MongoRepository<Ticket, String>{
 	 * @param pages
 	 * @return
 	 */
-	Page<Ticket> findByTitleIgnoreCaseContainingAndStatusIgnoreCaseContainingAndPriorityIgnoreCaseContainingAndAssignedUserIdOrderByDateDesc(String title, String status, String priority, String assignedUserId, Pageable pages);
+	Page<Ticket> findByTitleIgnoreCaseContainingAndStatusAndPriorityAndAssignedUserIdOrderByDateDesc(String title, String status, String priority, String assignedUserId, Pageable pages);
 	
 	/**
 	 * Retorna Tickets através do número passado por parâmetro.
