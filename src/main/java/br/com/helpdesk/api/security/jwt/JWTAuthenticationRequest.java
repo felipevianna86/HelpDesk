@@ -19,7 +19,7 @@ public class JWTAuthenticationRequest implements Serializable{
 	private String password;
 	
 	public JWTAuthenticationRequest() {
-		
+		super();
 	}
 	
 	public JWTAuthenticationRequest(String email, String password) {

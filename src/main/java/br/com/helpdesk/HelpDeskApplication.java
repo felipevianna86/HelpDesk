@@ -34,7 +34,6 @@ public class HelpDeskApplication {
 		admin.setProfile(ProfileEnum.ROLE_ADMIN);
 		
 		User userDB = userRepository.findByEmail(email);
-		System.out.println("USER DB: "+userDB);
 		if( userDB == null )
 			userRepository.save(admin);
 	}

@@ -48,14 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Bean
-	public JWTAuthenticationTokenFilter authenticationTokenFilterBean() {
+	public JWTAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
 		return new JWTAuthenticationTokenFilter();
 	}
 	
-	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
+	@Bean
+	public AuthenticationManager customAuthenticationManager() throws Exception {
+		return authenticationManager();
 	}
 	
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
