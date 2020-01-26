@@ -1,6 +1,7 @@
 package br.com.helpdesk.api.security.jwt;
 
 import java.io.Serializable;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 /**
  * 
@@ -126,8 +128,9 @@ public class JWTTokenUtil implements Serializable {
 		
 		final Date createdDate = (Date) claims.get(CLAIM_KEY_CREATED);
 		final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
+		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 		
-		return Jwts.builder().setClaims(claims).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, secret).compact();
+		return Jwts.builder().setClaims(claims).setExpiration(expirationDate).signWith(key).compact();
 	}
 	
 	/**
