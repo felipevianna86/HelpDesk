@@ -1,7 +1,5 @@
 package br.com.helpdesk.api.service.impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,9 +34,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findById(String userId) {
+	public User findById(String userId) {
 		
-		return this.userRepository.findById(userId);
+		if(this.userRepository.findById(userId).isPresent())
+			return this.userRepository.findById(userId).get();
+		
+		return null;
 	}
 
 	@Override

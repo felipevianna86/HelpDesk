@@ -1,7 +1,5 @@
 package br.com.helpdesk.api.service;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +13,11 @@ import br.com.helpdesk.api.entity.Ticket;
  * Interface de serviço do Ticket.
  */
 @Component
-public interface TikcetService {
+public interface TicketService {
 	
 	Ticket createOrUpdate(Ticket ticket); 
 	
-	Optional<Ticket> findById(String id);
+	Ticket findById(String id);
 	
 	void delete(String id);
 	

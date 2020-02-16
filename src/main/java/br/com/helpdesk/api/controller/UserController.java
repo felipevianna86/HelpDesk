@@ -1,7 +1,5 @@
 package br.com.helpdesk.api.controller;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,13 +142,13 @@ public class UserController {
 		
 		Response<User> response = new Response<>();
 		
-		Optional<User> user = userService.findById(id);
-		if(user.orElse(null) == null) {
+		User user = userService.findById(id);
+		if(user == null) {
 			response.getErrors().add("Register not found id: "+id);
 			return ResponseEntity.badRequest().body(response);
 		}
 		
-		response.setData(user.get());
+		response.setData(user);
 		
 		return ResponseEntity.ok(response);
 	}
@@ -166,8 +164,8 @@ public class UserController {
 		
 		Response<String> response = new Response<>();
 		
-		Optional<User> user = userService.findById(id);
-		if(user.orElse(null) == null) {
+		User user = userService.findById(id);
+		if(user == null) {
 			response.getErrors().add("Register not found id: "+id);
 			return ResponseEntity.badRequest().body(response);
 		}

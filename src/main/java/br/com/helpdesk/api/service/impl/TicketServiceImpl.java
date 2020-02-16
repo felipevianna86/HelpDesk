@@ -1,7 +1,5 @@
 package br.com.helpdesk.api.service.impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +9,7 @@ import br.com.helpdesk.api.entity.ChangeStatus;
 import br.com.helpdesk.api.entity.Ticket;
 import br.com.helpdesk.api.repository.ChangeStatusRepository;
 import br.com.helpdesk.api.repository.TicketRepository;
-import br.com.helpdesk.api.service.TikcetService;
+import br.com.helpdesk.api.service.TicketService;
 /**
  * 
  * @author felipe
@@ -19,7 +17,7 @@ import br.com.helpdesk.api.service.TikcetService;
  *Implementação do serviço relacionado ao Ticket.
  */
 @Service
-public class TicketServiceImpl implements TikcetService {
+public class TicketServiceImpl implements TicketService {
 	
 	@Autowired
 	private TicketRepository ticketRepository;
@@ -33,8 +31,11 @@ public class TicketServiceImpl implements TikcetService {
 	}
 
 	@Override
-	public Optional<Ticket> findById(String id) {
-		return this.ticketRepository.findById(id);
+	public Ticket findById(String id) {
+		if(this.ticketRepository.findById(id).isPresent())		
+			return this.ticketRepository.findById(id).get();
+		
+		return null;
 	}
 
 	@Override
