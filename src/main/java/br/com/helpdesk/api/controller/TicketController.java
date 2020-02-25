@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.helpdesk.api.dto.Summary;
 import br.com.helpdesk.api.entity.ChangeStatus;
 import br.com.helpdesk.api.entity.Ticket;
 import br.com.helpdesk.api.entity.User;
@@ -127,7 +128,7 @@ public class TicketController {
 		
 		if(ticket == null) {
 			response.getErrors().add("Register not found id: "+id);
-			ResponseEntity.badRequest().body(response);
+			return ResponseEntity.badRequest().body(response);
 		}
 		
 		List<ChangeStatus> changes = new ArrayList<>();
@@ -174,7 +175,7 @@ public class TicketController {
 		
 		if(ticket == null) {
 			response.getErrors().add("Register not found id: "+id);
-			ResponseEntity.badRequest().body(response);
+			return ResponseEntity.badRequest().body(response);
 		}
 		
 		ticketService.delete(ticket.getId());		
@@ -215,6 +216,108 @@ public class TicketController {
 			
 	}
 	
+	/**
+	 * Método para alterar status do ticket.
+	 * @param id
+	 * @param status
+	 * @param request
+	 * @param ticket
+	 * @param result
+	 * @return
+	 */
+	@PutMapping(value = "{id}/{status}")
+	@PreAuthorize("hasAnyRole('CUSTOMER', 'TECHNICIAN')")
+	public ResponseEntity<Response<Ticket>> changeStatus(@PathVariable("id") String id, @PathVariable("status") String status, HttpServletRequest request,
+			@RequestBody Ticket ticket, BindingResult result){
+		
+		Response<Ticket> response = new Response<>();
+		User userLogged = userFromRequest(request);
+		StatusEnum newStatus = StatusEnum.getStatus(status);
+		try {
+			validateChangeStatus(id, status, result);
+			
+			if(result.hasErrors()) {
+				result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
+				return ResponseEntity.badRequest().body(response);
+			}	
+			
+			Ticket ticketCurrent = ticketService.findById(id);
+			ticketCurrent.setStatus(newStatus);
+			
+			if(status.equals("Assigned"))
+				ticketCurrent.setAssignedUser(userLogged);
+						
+			Ticket ticketPersisted = ticketService.createOrUpdate(ticketCurrent);
+			ChangeStatus changeStatus = new ChangeStatus();
+			changeStatus.setUserChange(userLogged);
+			changeStatus.setDateChange(new Date());
+			changeStatus.setStatus(newStatus);
+			changeStatus.setTicket(ticketPersisted);
+			ticketService.createChangeStatus(changeStatus);
+			
+			response.setData(ticketPersisted);			
+			
+		}catch (Exception e) {
+			response.getErrors().add(e.getMessage());			
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		return ResponseEntity.ok(response);
+		
+	}
+	
+	/**
+	 * Método que contabiliza os tickets por status.
+	 * @return
+	 */
+	@GetMapping(value = "/summary")
+	@PreAuthorize("hasAnyRole('CUSTOMER', 'TECHNICIAN')")
+	public ResponseEntity<Response<Summary>> findSummary(){
+		
+		Response<Summary> response = new Response<>();
+		
+		Summary summary = new Summary();
+		
+		Integer amountNew = 0;
+		Integer amountResolved = 0;
+		Integer amountApproved = 0;
+		Integer amountDisapproved = 0;
+		Integer amountAssigned = 0;
+		Integer amountClosed = 0;
+		
+		Iterable<Ticket> tickets = ticketService.findAll();
+		
+		if(tickets != null) {
+			for(Iterator<Ticket> iterator = tickets.iterator(); iterator.hasNext();) {
+				Ticket ticket = iterator.next();
+				
+				if(ticket.getStatus().equals(StatusEnum.NEW))
+					amountNew++;
+				else if(ticket.getStatus().equals(StatusEnum.SOLVED))
+					amountResolved++;
+				else if(ticket.getStatus().equals(StatusEnum.APPROVED))
+					amountApproved++;
+				else if(ticket.getStatus().equals(StatusEnum.DISAPPROVED))
+					amountDisapproved++;
+				else if(ticket.getStatus().equals(StatusEnum.ASSIGNED))
+					amountAssigned++;
+				else if(ticket.getStatus().equals(StatusEnum.CLOSED))
+					amountClosed++;
+			}
+		}
+		summary.setAmountNew(amountNew);
+		summary.setAmountResolved(amountResolved);
+		summary.setAmountApproved(amountApproved);
+		summary.setAmountDisapproved(amountDisapproved);
+		summary.setAmountAssigned(amountAssigned);
+		summary.setAmountClosed(amountClosed);
+		
+		response.setData(summary);
+		
+		return ResponseEntity.ok(response);
+	}
+		
+	
 	private void validateCreateTicket(Ticket ticket, BindingResult result) {
 		if(ticket.getTitle() == null)
 			result.addError(new ObjectError("Ticket", "Title no information"));
@@ -223,6 +326,21 @@ public class TicketController {
 	private void validateUpdateTicket(Ticket ticket, BindingResult result) {
 		if(ticket.getId() == null)
 			result.addError(new ObjectError("Ticket", "ID no information"));
+		if(ticket.getTitle() == null)
+			result.addError(new ObjectError("Ticket", "Title no information"));
+	}
+	
+	/**
+	 * Método para validar alteração de status de um Ticket.
+	 * @param id
+	 * @param status
+	 * @param result
+	 */
+	private void validateChangeStatus(String id, String status, BindingResult result) {
+		if(id == null || id.trim().equals(""))
+			result.addError(new ObjectError("Ticket", "ID no information"));
+		if(status == null || status.trim().equals(""))
+			result.addError(new ObjectError("Ticket", "Status no information"));
 	}
 	
 	public User userFromRequest(HttpServletRequest request) {
@@ -235,10 +353,8 @@ public class TicketController {
 	}
 	
 	private Integer generateNumber() {
-		
-		Random random = new Random();
-		
-		return random.nextInt(9999);
+				
+		return new Random().nextInt(9999);
 	}
 	
 }
