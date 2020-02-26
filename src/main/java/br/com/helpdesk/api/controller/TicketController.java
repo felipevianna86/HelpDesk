@@ -186,8 +186,8 @@ public class TicketController {
 	@GetMapping(value = "{page}/{count}/{number}/{title}/{status}/{priority}/{assigned}")
 	@PreAuthorize("hasAnyRole('CUSTOMER', 'TECHNICIAN')")
 	public ResponseEntity<Response<Page<Ticket>>> findByParams(HttpServletRequest request, @PathVariable("page") int page,
-			@PathVariable("count") int count, @PathVariable("count") Integer number, @PathVariable("count") String title, 
-			@PathVariable("count") String status, @PathVariable("count") String priority, @PathVariable("count") boolean assigned){
+			@PathVariable("count") int count, @PathVariable("number") Integer number, @PathVariable("title") String title, 
+			@PathVariable("status") String status, @PathVariable("priority") String priority, @PathVariable("assigned") boolean assigned){
 		
 		title = title.equals("uninformed") ? "" : title;
 		status = status.equals("uninformed") ? "" : status;
