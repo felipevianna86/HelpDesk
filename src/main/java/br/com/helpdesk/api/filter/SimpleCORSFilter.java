@@ -1,31 +1,25 @@
 package br.com.helpdesk.api.filter;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class SimpleCORSFilter implements Filter{
+public class SimpleCORSFilter implements Filter {
 	
 	private final Log logger = LogFactory.getLog(this.getClass());
 	
 	@Override
-	public void init(FilterConfig fc) throws ServletException{
+	public void init(FilterConfig fc) {
 		logger.info("HelpDesk-API | SimpleCORSFilter loaded");
 	}
 	
@@ -44,12 +38,5 @@ public class SimpleCORSFilter implements Filter{
 			response.setStatus(HttpServletResponse.SC_OK);
 		else
 			chain.doFilter(req, resp);
-		
 	}
-	
-	@Override
-	public void destroy() {
-		
-	}
-
 }

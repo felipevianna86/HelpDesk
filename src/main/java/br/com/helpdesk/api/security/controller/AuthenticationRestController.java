@@ -1,7 +1,11 @@
 package br.com.helpdesk.api.security.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import br.com.helpdesk.api.entity.User;
+import br.com.helpdesk.api.security.jwt.JWTAuthenticationRequest;
+import br.com.helpdesk.api.security.jwt.JWTTokenUtil;
+import br.com.helpdesk.api.security.model.CurrentUser;
+import br.com.helpdesk.api.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,17 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import br.com.helpdesk.api.entity.User;
-import br.com.helpdesk.api.security.jwt.JWTAuthenticationRequest;
-import br.com.helpdesk.api.security.jwt.JWTTokenUtil;
-import br.com.helpdesk.api.security.model.CurrentUser;
-import br.com.helpdesk.api.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*")

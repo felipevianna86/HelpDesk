@@ -1,14 +1,12 @@
 package br.com.helpdesk.api.entity;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
+import br.com.helpdesk.api.enums.ProfileEnum;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import br.com.helpdesk.api.enums.ProfileEnum;
 
 /**
  * 
